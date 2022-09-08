@@ -1,9 +1,11 @@
 #include <stdio.h>
-#include <sys/socket.h>
-#include <sys/types.h>
-#include <unistd.h>
+#include <WinSock.h>
+#include <WinSock2.h>
+// #include <sys/socket.h>
+// #include <sys/types.h>
+// #include <unistd.h>
 #include <stdlib.h>
-#include <netinet/in.h>
+// #include <netinet/in.h>
 #include <string.h>
 int main()
 {
@@ -11,7 +13,7 @@ int main()
   struct sockaddr_in server_address;
   char client_message[256];
   char server_response[256];
-  socklen_t server_len;
+  // socklen_t server_len;
   int error_check;
 
   client_socket = socket(AF_INET, SOCK_STREAM, 0);

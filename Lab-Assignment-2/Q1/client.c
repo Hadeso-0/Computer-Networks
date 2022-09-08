@@ -11,7 +11,7 @@ int main()
     // create a socket
     int network_socket;
     int error_check;
-    network_socket = socket(AF_INET, SOCK_STREAM, 0)
+    network_socket = socket(AF_INET, SOCK_STREAM, 0);
 
     // specify an address for the socket to connect to
     struct sockaddr_in server_address;
