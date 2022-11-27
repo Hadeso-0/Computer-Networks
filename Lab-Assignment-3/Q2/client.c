@@ -54,6 +54,11 @@ int main(int argc, char**argv) {
 	}
 
 	serverAddr = argv[1]; 
+	if(strcmp(serverAddr,"127.0.0.1")){
+		printf("IP address not allowed\n");
+		exit(1);  
+	}
+	
 	sockfd = connection(argv,serverAddr,addr);
 
 	bzero(&buffer, 10);

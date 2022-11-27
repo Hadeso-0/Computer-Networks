@@ -9,7 +9,7 @@ int main()
 {
   int server_socket;
   char server_message[256];
-  char message_for_client[256];
+  char message_to_send[256];
   char filebuffer[10000];
   struct sockaddr_in client_address;
   socklen_t client_len;
@@ -56,48 +56,36 @@ int main()
     exit(1);
   }
 
-  char *token;
+  char *addrtoken;
   int flag = 0;
   int copyflag = 0;
 
   error_check = recv(client_socket, server_message, sizeof(server_message), 0);
 
-  // Here I read the file line by line, after reading a line I split it
-  // by white space so that I have number and its value separately.
-  // if the client query number and the number read from file matches,
-  // I change the flag to 1 indicating a match has been done.
-  // I copy the response to be sent to client in message_for_client and
-  // change copyflag to 1 indicating query has been found. If I don't find the
-  // query then copyflag stays 0 and I send response as "Not Found"
-  // For some reason break wasn't working so I let the program loop over complete
-  // file even if it finds the query as the query will be unique so answer won't change.
-  // flag is changed back to 0 on finding query so that the answer don't get changed.
-
   while(fgets(filebuffer, 10000, (FILE *) fileptr))
   {
-    token = strtok(filebuffer, " ");
-    while(token != NULL)
+    addrtoken = strtok(filebuffer, " ");
+    while(addrtoken != NULL)
     {
       if(flag == 1)
       {
-        printf("%s\n", token);
-        strcpy(message_for_client, token);
+        printf("%s\n", addrtoken);
+        strcpy(message_to_send, addrtoken);
         flag = 0;
         copyflag = 1;
       }
-      if (strcmp(token,server_message) == 0) {
+      if (strcmp(addrtoken,server_message) == 0) {
         flag = 1;
       }
-      token = strtok (NULL, " ");
+      addrtoken = strtok (NULL, " ");
     }
   }
 
-  // Case when the requested query is not in file.
   if (copyflag == 0) {
-    strcpy(message_for_client,"Not found in directory.\n");
+    strcpy(message_to_send,"Address not found\n");
   }
 
-  error_check = send(client_socket, message_for_client, sizeof(message_for_client), 0);
+  error_check = send(client_socket, message_to_send, sizeof(message_to_send), 0);
   if(error_check == -1)
   {
     printf("error in sending\n");
